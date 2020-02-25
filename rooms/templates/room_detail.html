@@ -1,23 +1,84 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
     <title></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
   </head>
   <body>
     <h3>{{room.room_number}}</h3>
     <h3>{{room.room_manager.manager_id.name}}</h3>
     <h4>{{start_date}}  -  {{end_date}}</h4>
-    <form method="post">
+    <form method="post">{% csrf_token %}
       <input type="date" name="check_day" min="{{start_date}}" max="{{end_date}}"><br>
       <button type="submit" name="button">Check Availaibility</button>
     </form>
 
     <img width="250" height="250" src="/media/{{room.room_pic}}" alt="">
 
+
+    {% if slots %}
     <h3>All Slots</h3>
     {% for i in slots %}
       <h4>{{i.start_time}}  -  {{i.end_time}}</h4>
     {% endfor %}
+    {% endif %}
+
+    {% if avail_slots %}
+      <h3>Available Slots on {{date}}</h3>
+      {% for i in avail_slots %}
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal{{forloop.counter}}">
+        {{i.start_time}}  -  {{i.end_time}}
+      </button>
+      <div class="modal fade" id="exampleModal{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" id="eddetailsform">
+          <form action="{% url 'Book_Room' %}"  method="POST">{% csrf_token %}
+            <h3>Confirm Booking</h3><hr>
+
+            <div class="row">
+              <div class="col-sm">
+                <label>Room No.</label>
+                <input type="text" name="room_number" readonly value="{{room.room_number}}" >
+              </div>
+            </div>
+
+            <input type="text" name="start_time" hidden value="{{i.start_time}}">
+            <input type="text" name="end_time" hidden value="{{i.end_time}}">
+
+
+
+
+            <div class="row">
+              <div class="col-sm">
+                <label>Booked for</label>
+                  <input type="text" readonly name="booked_for" value="{{date}}">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm">
+                <label>Time Slot</label>
+                  <input type="text" readonly name="slot" value="{{i.start_time}} - {{i.end_time}}">
+              </div>
+            </div>
+
+            <br>
+            <button type="submit" name="button"> Book Room </button>
+          </form>
+        </div>
+      </div>
+      </div>
+
+
+      {% endfor %}
+    {% endif %}
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   </body>
 </html>

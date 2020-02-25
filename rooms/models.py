@@ -27,7 +27,7 @@ class Manager(models.Model):
 
 class Room(models.Model):
     room_manager = models.ForeignKey(Manager,on_delete=models.CASCADE)
-    room_number = models.CharField(max_length=30)
+    room_number = models.CharField(max_length=30,unique=True)
     room_pic = models.ImageField(upload_to = 'room/')
     prior_booking_days = models.IntegerField()
     slug = models.SlugField(null=True,blank=True)
@@ -43,6 +43,9 @@ class TimeSlot(models.Model):
     room_id = models.ForeignKey(Room,on_delete=models.CASCADE)
     start_time = models.CharField(max_length=10,default="")
     end_time = models.CharField(max_length=10,default="")
+
+    class Meta:
+        unique_together = ('room_id','start_time','end_time')
 
     def __str__(self):
         return self.room_id.room_number

@@ -4,6 +4,9 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+    <script src="http://cdn.jsdelivr.net/timepicker.js/latest/timepicker.min.js"></script>
+    <link href="http://cdn.jsdelivr.net/timepicker.js/latest/timepicker.min.css" rel="stylesheet"/>
+
   </head>
   <style media="screen">
     #final_timeslots{
@@ -43,6 +46,19 @@
 
 
     <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+
+    <script>
+    var timepicker = new TimePicker('time', {
+    lang: 'en',
+    theme: 'dark'
+    });
+    timepicker.on('change', function(evt) {
+
+    var value = (evt.hour || '00') + ':' + (evt.minute || '00');
+    evt.element.value = value;
+
+    });
+    </script>
 
 
 
