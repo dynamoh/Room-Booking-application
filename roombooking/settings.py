@@ -106,6 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
 AUTH_USER_MODEL = 'accounts.User'
+LOGIN_REDIRECT_URL = 'homepage'
 
 
 LANGUAGE_CODE = 'en-us'
@@ -129,6 +130,10 @@ EMAIL_HOST = EMAIL_HOST
 EMAIL_HOST_USER = EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
 EMAIL_PORT = EMAIL_PORT
+
+
+
+
 
 
 

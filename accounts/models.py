@@ -62,7 +62,7 @@ class User(PermissionsMixin,AbstractBaseUser):
         max_length=255,
         unique=True,
     )
-    name = models.CharField(max_length=250,unique=True)
+    name = models.CharField(max_length=250)
     customer = models.BooleanField(default=True)
     manager = models.BooleanField(default=False)
     signup_time = models.DateTimeField(auto_now_add=True,blank=True,null=True)

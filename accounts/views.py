@@ -24,10 +24,9 @@ from .forms import RegisterForm
 
 def login_user(request):
     logout(request)
-    print("cdsv")
     email = password = ''
     val=0
-    if request.POST:
+    if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
         user = authenticate(email=email, password=password)
@@ -38,10 +37,17 @@ def login_user(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
+                    print('logged in')
+                    return HttpResponseRedirect('/')
                 else:
                     val=2
+            else:
+                val=1
+                return render(request,'login.html',{'error':'Please Enter correct username and password !!','val':val})
         else:
             val=1
+            return render(request,'login.html',{'error':'Please Enter correct username and password !!','val':val})
+
     return render(request,'login.html',{'error':'Please Enter correct username and password !!','val':val})
 
 

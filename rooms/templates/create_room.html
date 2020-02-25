@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <style media="screen">
+    #final_timeslots{
+      display:none;
+    }
+  </style>
+  <body>
+    <form action="{% url 'Add_Room' %}" id="create_room_form" method="post">{% csrf_token %}
+      <input type="text" name="room_number" placeholder="Room Number"><br><br>
+      <input type="file" name="room_pic" placeholder="Room Picture"><br><br>
+      <input type="number" name="prior_booking_days" placeholder="Prior Booking Days"><br><br>
+
+      <div id="final_timeslots">
+
+      </div>
+
+      <div onclick="create_room();">Create Room</div>
+
+    </form>
+
+
+    <input type="time" id="start_time" placeholder="Start Time"><br><br>
+    <input type="time" id="end_time" placeholder="End Time"><br><br>
+
+    <div onclick="add_timeslot();" >Add</div><br><br>
+
+    <div class="timeslots_list">
+
+      <ul id="tms_l">
+
+      </ul>
+
+    </div>
+
+
+
+
+
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+
+
+
+    <script>
+
+      var count=0;
+      function add_timeslot(){
+        var t1 = document.getElementById('start_time').value;
+        var t2 = document.getElementById('end_time').value;
+        document.getElementById('start_time').value = '';
+        document.getElementById('end_time').value = '';
+        var st_time = `<li id="start_time`+count+`" class="timeslot_start_time">`+ t1 +`</li>`;
+        var ed_time = `<li id="end_time`+count+`" class="timeslot_end_time">`+ t2 +`</li>`;
+        if(t1!='' && t2!='')
+        {
+          count = count+1;
+          $('#tms_l').append(st_time);
+          $('#tms_l').append(ed_time);
+        }
+      }
+
+      function create_room(){
+        alert("clicked");
+        var start_time_list = document.getElementsByClassName('timeslot_start_time');
+        var end_time_list = document.getElementsByClassName('timeslot_end_time');
+        alert(start_time_list);
+        var stl = start_time_list.length;
+        alert(stl);
+        for(var i=0;i<stl;i++){
+          var sk = `<input type="time" name='fn_start_time' value="`+ start_time_list[i].innerHTML +`">`;
+          var ek = `<input type="time" name='fn_end_time' value="`+ end_time_list[i].innerHTML +`">`;
+          console.log(start_time_list[i]);
+          $('#final_timeslots').append(sk);
+          $('#final_timeslots').append(ek);
+        }
+        alert("done");
+        $('#create_room_form').submit();
+      }
+
+    </script>
+
+
+
+  </body>
+</html>

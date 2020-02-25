@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <h3>{{room.room_number}}</h3>
+    <h3>{{room.room_manager.manager_id.name}}</h3>
+    <h4>{{start_date}}  -  {{end_date}}</h4>
+    <form method="post">
+      <input type="date" name="check_day" min="{{start_date}}" max="{{end_date}}"><br>
+      <button type="submit" name="button">Check Availaibility</button>
+    </form>
+
+    <img width="250" height="250" src="/media/{{room.room_pic}}" alt="">
+
+    <h3>All Slots</h3>
+    {% for i in slots %}
+      <h4>{{i.start_time}}  -  {{i.end_time}}</h4>
+    {% endfor %}
+  </body>
+</html>
