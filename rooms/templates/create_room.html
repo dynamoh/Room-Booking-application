@@ -1,45 +1,177 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 {% load static %}
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <script src="http://cdn.jsdelivr.net/timepicker.js/latest/timepicker.min.js"></script>
-    <link href="http://cdn.jsdelivr.net/timepicker.js/latest/timepicker.min.css" rel="stylesheet"/>
 
-  </head>
+{% block content %}
+
   <style media="screen">
     #final_timeslots{
       display:none;
     }
+
+    body{
+      overflow-x:hidden;
+      background-color:#F2F2F2;
+    }
+
+    .site-navbar-wrap, .site-navbar{
+      background-color:white !important;
+    }
+
+    .site-navbar-wrap{
+      box-shadow:0px 1px 10px -5px;
+    }
+
+    label{
+      text-align: left;
+      font: Regular 20px/24px Montserrat;
+      letter-spacing: 0;
+      color: #000000;
+      opacity: 1;
+      font-weight:500 !important;
+      margin-top:10px;
+    }
+
+    .edinpclass, input{
+      font-weight:500 !important;
+      background: white 0% 0% no-repeat padding-box !important;
+      border-radius: 12px !important;
+      opacity: 1;
+      margin-bottom:0px !important;
+      border:none;
+      padding:10px 3px 10px 20px;
+      width:100%;
+    }
+
+    .custombtn{
+        border-color: #1492E6;
+        background: #1492E6;
+        box-shadow: 3px 3px 6px #00000029;
+        font-weight: 700;
+        border-radius: 2px;
+        word-spacing: 4px;
+        font-size: 15px;
+        color:white;
+        padding:13px 20px;
+        border:none;
+        margin-top: 15px;
+        cursor:pointer;
+    }
+
+    .added_slots_btn{
+      border-color: #1492E6;
+      background: #1492E6;
+      box-shadow: 3px 3px 6px #00000029;
+      font-weight: 700;
+      border-radius: 2px;
+      word-spacing: 4px;
+      font-size: 15px;
+      color:white;
+      padding:13px 20px;
+      border:none;
+      margin-top: 15px;
+      cursor:pointer;
+      width:170px;
+    }
+
+    .timeslot_start_time, .timeslot_end_time{
+      display:none;
+    }
+
+    #time_error{
+      display:none;
+    }
   </style>
-  <body>
-    <form action="{% url 'Add_Room' %}" id="create_room_form" method="post">{% csrf_token %}
-      <input type="text" name="room_number" placeholder="Room Number"><br><br>
-      <input type="file" name="room_pic" placeholder="Room Picture"><br><br>
-      <input type="number" name="prior_booking_days" placeholder="Prior Booking Days"><br><br>
+
+  <div class="" style="margin-top:15vh;margin-left:5vw;margin-right:5vw;margin-bottom:8vh;">
+    <div class="row">
+      <div class="col-md-6 mx-auto text-center mb-2 section-heading">
+        <h2 class="mb-5">Create Room</h2>
+      </div>
+    </div>
+
+    <form action="{% url 'Add_Room' %}" id="create_room_form" method="POST" enctype="multipart/form-data" >{% csrf_token %}
+      <div class="row">
+        <div class="col-sm">
+          <label>Room Number</label>
+          <input type="text" name="room_number" placeholder="Room Number" required><br><br>
+        </div>
+        <div class="col-sm">
+          <label>Room Type</label>
+          <select class="edinpclass" name="room_type" required>
+            <option value="Single Room">Single Room</option>
+            <option value="Family Room">Family Room</option>
+            <option value="Delux Suite">Delux Suite</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <label>Price/night</label>
+          <input type="number" min="1000" name="price" required value="">
+        </div>
+        <div class="col-sm">
+          <label>Room Picture</label>
+          <input type="file" name="room_pic" required placeholder="Room Picture"><br><br>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <label>Number of days before which booking is allowed</label>
+          <input type="number" name="prior_booking_days" required placeholder="Prior Booking Days"><br><br>
+        </div>
+      </div><hr>
+
+      <div class="row">
+        <div class="col-sm">
+          <label>Start Time</label>
+          <input type="time" id="start_time" required placeholder="Start Time"><br><br>
+        </div>
+        <div class="col-sm">
+          <label>End Time</label>
+          <input type="time" id="end_time" required placeholder="End Time"><br><br>
+        </div>
+        <div class="col-sm">
+          <label></label>
+          <div align="center" class="custombtn" onclick="add_timeslot();" >Add Slot</div><br><br>
+        </div>
+      </div>
+
+      <p style="color:red;font-size:0.8em;" id="time_error">*End Time must be after the Start Time.</p>
+
+      <div class="added_slots">
+        <div class="row" id="added_slots_row">
+
+        </div>
+      </div>
+
+      <div class="timeslots_list">
+
+        <ul id="tms_l">
+
+        </ul>
+
+      </div>
+
+
+
+
 
       <div id="final_timeslots">
 
       </div>
 
-      <div onclick="create_room();">Create Room</div>
+      <div align="center" style="width:100%;" onclick="create_room();" class="custombtn">Create Room</div>
 
     </form>
 
 
-    <input type="time" id="start_time" placeholder="Start Time"><br><br>
-    <input type="time" id="end_time" placeholder="End Time"><br><br>
 
-    <div onclick="add_timeslot();" >Add</div><br><br>
 
-    <div class="timeslots_list">
 
-      <ul id="tms_l">
+  </div>
 
-      </ul>
-
-    </div>
 
 
 
@@ -66,18 +198,31 @@
 
       var count=0;
       function add_timeslot(){
+        document.getElementById('time_error').style.display = "none";
         var t1 = document.getElementById('start_time').value;
         var t2 = document.getElementById('end_time').value;
         document.getElementById('start_time').value = '';
         document.getElementById('end_time').value = '';
-        var st_time = `<li id="start_time`+count+`" class="timeslot_start_time">`+ t1 +`</li>`;
-        var ed_time = `<li id="end_time`+count+`" class="timeslot_end_time">`+ t2 +`</li>`;
-        if(t1!='' && t2!='')
-        {
-          count = count+1;
-          $('#tms_l').append(st_time);
-          $('#tms_l').append(ed_time);
+        // var t1Date = new Date(t1).getTime();
+        // var t2Date = new Date(t2).getTime();
+        if(t1>=t2){
+          document.getElementById('time_error').style.display = "grid";
         }
+        else{
+          var st_time = `<li id="start_time`+count+`" class="timeslot_start_time">`+ t1 +`</li>`;
+          var ed_time = `<li id="end_time`+count+`" class="timeslot_end_time">`+ t2 +`</li>`;
+          if(t1!='' && t2!='')
+          {
+            count = count+1;
+            $('#tms_l').append(st_time);
+            $('#tms_l').append(ed_time);
+          }
+          var fs = `<div class="col-sm">
+            <p class="added_slots_btn">`+t1+` - `+t2+`</p>
+          </div>`;
+          $('#added_slots_row').append(fs);
+        }
+
       }
 
       function create_room(){
@@ -102,5 +247,4 @@
 
 
 
-  </body>
-</html>
+{% endblock %}

@@ -73,11 +73,11 @@
             <p class="card-text" style="margin-left:30%;font-weight:bold;font-size:1.3em;padding:5px;text-transform:uppercase;">{{user.name}}</p>
           </div>
         </div>
-        <a href="{% url 'PreviousBookings' %}"><button type="button" class="custombtn" style="width:18rem;margin-top:50px;;" name="button">Show Previous Bookings</button></a>
+        <a href="{% url 'PreviousBookings' %}"><button type="button" class="custombtn" style="width:18rem;margin-top:50px;;" name="button">Show All Bookings</button></a>
       </div>
 
       <div class="col-sm">
-        <form method="POST">{% csrf_token %}
+        <form method="POST" enctype="multipart/form-data">{% csrf_token %}
 
             <div class="row">
               <div class="col-sm">

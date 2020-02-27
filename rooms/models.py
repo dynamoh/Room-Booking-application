@@ -64,3 +64,12 @@ class RoomBooked(models.Model):
     room_timeslot_booked = models.ForeignKey(TimeSlot,on_delete=models.CASCADE)
     booked_for = models.DateField()
     booked_on = models.DateTimeField(default=timezone.now)
+
+class ContactUs(models.Model):
+    full_name = models.CharField(max_length=600)
+    email = models.EmailField()
+    phone = models.CharField(max_length=12)
+    message = models.TextField()
+
+    def __str__(self):
+        return self.full_name
