@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<style media="screen">
+  label{
+    text-align: left;
+    font: Regular 20px/24px Montserrat;
+    letter-spacing: 0;
+    color: #000000;
+    opacity: 1;
+    font-weight:500 !important;
+    margin-top:10px;
+  }
+
+  .edinpclass, input{
+    font-weight:500 !important;
+    background: white 0% 0% no-repeat padding-box !important;
+    border-radius: 12px !important;
+    opacity: 1;
+    margin-bottom:0px !important;
+    border:none;
+    padding:10px 3px 10px 20px;
+    width:100%;
+
+  }
+
+  a:hover{
+    text-decoration:none;
+  }
+
+  .custombtn{
+      border-color: #1492E6;
+      background: #1492E6;
+      box-shadow: 3px 3px 6px #00000029;
+      font-weight: 700;
+      border-radius: 2px;
+      word-spacing: 4px;
+      font-size: 15px;
+      color:white;
+      padding:13px 20px;
+      border:none;
+      margin-top: 15px;
+      cursor:pointer;
+  }
+
+  body{
+    overflow-x:hidden;
+    background-color:#F2F2F2;
+  }
+
+  .site-navbar-wrap, .site-navbar{
+    background-color:white !important;
+  }
+
+  .site-navbar-wrap{
+    box-shadow:0px 1px 10px -5px;
+  }
+
+</style>
+
+    <div class="row" style="margin-top:15vh;margin-left:5vw;margin-right:5vw;margin-bottom:8vh;">
+      <div class="col-sm">
+        <div class="card" style="width: 18rem;box-shadow:0 10px 10px -5px;margin-top:35px;">
+          {% if customer.profile_pic %}
+            <img class="card-img-top" src="/media/{{customer.profile_pic}}" height="250" width="250" alt="Card image cap">
+          {% else %}
+            <img class="card-img-top" src="{% static 'images/dummy.png' %}" height="250" width="250" alt="Card image cap">
+          {% endif %}
+          <div class="card-body" style="padding:5px;">
+            <p class="card-text" style="margin-left:30%;font-weight:bold;font-size:1.3em;padding:5px;text-transform:uppercase;">{{user.name}}</p>
+          </div>
+        </div>
+        <a href="{% url 'PreviousBookings' %}"><button type="button" class="custombtn" style="width:18rem;margin-top:50px;;" name="button">Show Previous Bookings</button></a>
+      </div>
+
+      <div class="col-sm">
+        <form method="POST">{% csrf_token %}
+
+            <div class="row">
+              <div class="col-sm">
+                <label>Email</label><br>
+                <input type="text" readonly name="email_id" value="{{customer.customer_id.email}}">
+              </div>
+              <div class="col-sm">
+                <label>Full Name</label><br>
+                <input type="text" readonly name="full_name" value="{{customer.customer_id.name}}">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm">
+                <label>Contact</label><br>
+                <input type="text" name="contact" value="{{customer.contact}}">
+              </div>
+              <div class="col-sm">
+                <label>Profession</label><br>
+                <input type="text" name="profession" value="{{customer.profession}}">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm">
+                <label>Address</label><br>
+                <input type="text" name="address" value="{{customer.address}}">
+              </div>
+              <div class="col-sm">
+                <label>City</label><br>
+                <input type="text" name="city" value="{{customer.city}}">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm">
+                <label>Profile Picture</label>
+                <input type="file" name="profile_pic" >
+              </div>
+            </div>
+
+            <button type="submit" class="custombtn" style="width:100%;" name="button">Save Changes</button>
+
+        </form>
+      </div>
+    </div>
+
+{% endblock %}

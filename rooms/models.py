@@ -3,24 +3,31 @@ from accounts.models import User
 from django.utils import timezone
 from django.template.defaultfilters import slugify
 # Create your models here.
-#
+
+class Constants:
+    ROOMTYPES = {
+            ('Single Room','Single Room'),
+            ('Family Room','Family Room'),
+            ('Delux Suite','Delux Suite'),
+    }
+
 class Customer(models.Model):
     customer_id = models.ForeignKey(User,on_delete=models.CASCADE,related_name="Customer")
-    contact = models.CharField(max_length=12)
+    contact = models.CharField(max_length=12,blank=True,null=True)
     address = models.CharField(max_length=300,blank=True,null=True)
     city = models.CharField(max_length=300,blank=True,null=True)
     profession = models.CharField(max_length=200,blank=True,null=True)
-    profile_pic = models.ImageField(upload_to='customer/')
+    profile_pic = models.ImageField(upload_to='customer/',blank=True,null=True)
 
     def __str__(self):
         return self.customer_id.name
 
 class Manager(models.Model):
     manager_id = models.ForeignKey(User,on_delete=models.CASCADE,related_name="Manager")
-    contact = models.CharField(max_length=12)
+    contact = models.CharField(max_length=12,blank=True,null=True)
     address = models.CharField(max_length=300,blank=True,null=True)
     city = models.CharField(max_length=300,blank=True,null=True)
-    profile_pic = models.ImageField(upload_to='manager/')
+    profile_pic = models.ImageField(upload_to='manager/',blank=True,null=True)
 
     def __str__(self):
         return self.manager_id.name
@@ -29,7 +36,9 @@ class Room(models.Model):
     room_manager = models.ForeignKey(Manager,on_delete=models.CASCADE)
     room_number = models.CharField(max_length=30,unique=True)
     room_pic = models.ImageField(upload_to = 'room/')
+    room_type = models.CharField(max_length=100,choices= Constants.ROOMTYPES,default='Single Room')
     prior_booking_days = models.IntegerField()
+    price = models.IntegerField(default=1000)
     slug = models.SlugField(null=True,blank=True)
 
     def save(self,*args,**kwargs):

@@ -1,84 +1,214 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 {% load static %}
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
+
+{% block content %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-  </head>
+
+  <style media="screen">
+    body{
+      overflow-x:hidden;
+      background-color:#F2F2F2;
+    }
+
+    .input_date{
+      border-radius:20px;
+      padding:8px 3px 8px 30px;
+      border:none;
+      background-color:white;
+      width:200px;
+      margin-right:40px;
+      margin-top:15px;
+    }
+
+    .input_date:hover{
+      border:none;
+    }
+
+    .custombtn{
+        border-color: #1492E6;
+        background: #1492E6;
+        box-shadow: 3px 3px 6px #00000029;
+        font-weight: 700;
+        border-radius: 2px;
+        word-spacing: 4px;
+        font-size: 15px;
+        color:white;
+        padding:13px 20px;
+        border:none;
+        margin-top: 15px;
+    }
+
+    .modal-dialog{
+      border-radius: 12px;
+    }
+
+    .modal-content{
+      padding:30px !important;
+    }
+
+    label{
+      text-align: left;
+      font: Regular 20px/24px Montserrat;
+      letter-spacing: 0;
+      color: #000000;
+      opacity: 1;
+      font-weight:500 !important;
+      margin-top:10px;
+    }
+
+    .edinpclass{
+      font-weight:500 !important;
+      background: #F2F2F6 0% 0% no-repeat padding-box !important;
+      border-radius: 12px !important;
+      opacity: 1;
+      margin-bottom:0px !important;
+      border:none;
+      padding:10px 3px 10px 20px;
+      width:100%;
+
+    }
+
+    a:hover{
+      text-decoration:none;
+    }
+
+    .site-navbar-wrap{
+      box-shadow:0px 1px 10px -5px;
+    }
+
+  </style>
   <body>
-    <h3>{{room.room_number}}</h3>
-    <h3>{{room.room_manager.manager_id.name}}</h3>
-    <h4>{{start_date}}  -  {{end_date}}</h4>
-    <form method="post">{% csrf_token %}
-      <input type="date" name="check_day" min="{{start_date}}" max="{{end_date}}"><br>
-      <button type="submit" name="button">Check Availaibility</button>
-    </form>
-
-    <img width="250" height="250" src="/media/{{room.room_pic}}" alt="">
-
-
-    {% if slots %}
-    <h3>All Slots</h3>
-    {% for i in slots %}
-      <h4>{{i.start_time}}  -  {{i.end_time}}</h4>
-    {% endfor %}
-    {% endif %}
-
-    {% if avail_slots %}
-      <h3>Available Slots on {{date}}</h3>
-      {% for i in avail_slots %}
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal{{forloop.counter}}">
-        {{i.start_time}}  -  {{i.end_time}}
-      </button>
-      <div class="modal fade" id="exampleModal{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content" id="eddetailsform">
-          <form action="{% url 'Book_Room' %}"  method="POST">{% csrf_token %}
-            <h3>Confirm Booking</h3><hr>
-
-            <div class="row">
-              <div class="col-sm">
-                <label>Room No.</label>
-                <input type="text" name="room_number" readonly value="{{room.room_number}}" >
-              </div>
-            </div>
-
-            <input type="text" name="start_time" hidden value="{{i.start_time}}">
-            <input type="text" name="end_time" hidden value="{{i.end_time}}">
 
 
 
 
-            <div class="row">
-              <div class="col-sm">
-                <label>Booked for</label>
-                  <input type="text" readonly name="booked_for" value="{{date}}">
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-sm">
-                <label>Time Slot</label>
-                  <input type="text" readonly name="slot" value="{{i.start_time}} - {{i.end_time}}">
-              </div>
-            </div>
-
-            <br>
-            <button type="submit" name="button"> Book Room </button>
-          </form>
+    <div class="row" style="margin-top:20vh;margin-left:5vw;margin-bottom:8vh;">
+      <div class="col-sm">
+        <div class="card" style="width: 18rem;box-shadow:0 10px 10px -8px;">
+          <img class="card-img-top" src="/media/{{room.room_pic}}" height="250" width="250" alt="Card image cap">
+          <div class="card-body" style="padding:5px;">
+            <p class="card-text" style="margin-left:30%;font-weight:bold;font-size:2em;padding:5px;">{{room.room_number}}</p>
+          </div>
         </div>
+        <button type="button" class="custombtn" style="width:18rem;margin-top:50px;background-color:#f23a2e;" name="button">Price ₹{{room.price}}.00 / per night</button>
       </div>
-      </div>
+      <div class="col-sm" style="margin-right:5vw;margin-top:15px;">
+
+        <p style="font-size:1.8em;">Room Manager : {{room.room_manager.manager_id.name}}</p>
+        <form method="post">{% csrf_token %}
+          <div class="row" style="margin-bottom:80px;">
+            <input type="date" class="input_date" name="check_day" min="{{start_date}}" max="{{end_date}}"><br>
+            <button type="submit" class="custombtn" name="button">Check Availaibility</button>
+          </div>
+
+        </form>
+
+        {% if no_slots %}
+          <p style="font-size:1.4em;margin-bottom:30px;color:red;">Sorry!! All slots for Room {{room.room_number}} on {{date}} are booked.</p>
+        {% endif %}
+
+        {% if slots %}
+        <p style="font-size:1.8em;margin-bottom:30px;">All Slots for Room {{room.room_number}}</p>
+        <div class="row" style="margin-left:0px;">
+        {% for i in slots %}
+
+          <h4 style="background-color:#f23a2e;font-size:1.3em;padding:10px 15px 10px 15px;border-radius:15px;color:white;font-weight:600;width:150px;margin-right:20px;">{{i.start_time}}  -  {{i.end_time}}</h4>
+
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if avail_slots %}
+          <p style="font-size:1.8em;">Available Slots on {{date}}</p>
+          {% for i in avail_slots %}
+          {% if user.is_authenticated %}
+          <button type="button" style="background-color:#f23a2e;font-size:1.3em;padding:10px 15px 10px 15px;border-radius:15px;color:white;font-weight:600;width:150px;margin-right:20px;border:none;" data-toggle="modal" data-target="#exampleModal{{forloop.counter}}">
+            {{i.start_time}}  -  {{i.end_time}}
+          </button>
+          {% else %}
+          <button type="button" style="background-color:#f23a2e;font-size:1.3em;padding:10px 15px 10px 15px;border-radius:15px;color:white;font-weight:600;width:150px;margin-right:20px;border:none;" data-toggle="modal" data-target="#exampleModallogin{{forloop.counter}}">
+            {{i.start_time}}  -  {{i.end_time}}
+          </button>
+          {% endif %}
+
+          <div class="modal fade" id="exampleModallogin{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" id="eddetailsform" align="center">
+              <h3>Login Required</h3><hr>
+              <p>Please Login to book a room.</p>
+
+              <a href="{% url 'loginpage' %}"><button type="button" class="custombtn" style="width:100%;" name="button">Login/SignUp</button></a>
+            </div>
+          </div>
+          </div>
 
 
-      {% endfor %}
-    {% endif %}
+
+
+          <div class="modal fade" id="exampleModal{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" id="eddetailsform">
+              <form action="{% url 'Book_Room' %}"  method="POST">{% csrf_token %}
+                <h3>Confirm Booking</h3><hr>
+
+                <div class="row">
+                  <div class="col-sm">
+                    <label>Room Number</label><br>
+                    <input type="text" name="room_number" class="edinpclass" readonly value="{{room.room_number}}" >
+                  </div>
+                  <div class="col-sm">
+                    <label>Booked for</label><br>
+                      <input type="text" readonly name="booked_for" class="edinpclass" value="{{date}}">
+                  </div>
+                </div>
+
+                <input type="text" name="start_time" hidden value="{{i.start_time}}">
+                <input type="text" name="end_time" hidden value="{{i.end_time}}">
+
+
+
+
+                <div class="row">
+
+                </div>
+
+                <div class="row">
+                  <div class="col-sm">
+                    <label>Time Slot</label><br>
+                      <input type="text" readonly class="edinpclass" name="slot" value="{{i.start_time}} - {{i.end_time}}">
+                  </div>
+                  <div class="col-sm">
+                    <label>Price</label><br>
+                      <input type="text" readonly class="edinpclass" name="price" value="₹{{room.price}}.00 / per night">
+                  </div>
+                </div>
+
+                <br>
+                <button type="submit" class="custombtn" style="width:100%;" name="button"> Book Room </button>
+              </form>
+            </div>
+          </div>
+          </div>
+
+
+          {% endfor %}
+        {% endif %}
+        {% if no_slots %}
+        <p></p>
+        {% else %}
+        <p style="color:red;font-size:0.8em;margin-top:25px;">*Select a day and click on a timeslot to book that timeslot for the selected day.</p>
+        {% endif %}
+
+      </div>
+    </div>
+
+
+
+
 
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-  </body>
-</html>
+  {% endblock %}

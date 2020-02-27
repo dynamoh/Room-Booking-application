@@ -18,6 +18,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse,Http404
 
 from .models import User
 from .forms import RegisterForm
+from rooms.models import Customer,Manager
 # Create your views here.
 
 
@@ -37,7 +38,11 @@ def login_user(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    print('logged in')
+                    obj = Customer.objects.filter(customer_id=request.user).first()
+                    obj1 = Manager.objects.filter(manager_id=request.user).first()
+                    if obj:
+                        if obj.contact == '':
+                            return HttpResponseRedirect('/')
                     return HttpResponseRedirect('/')
                 else:
                     val=2
@@ -111,10 +116,10 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        if user.student == True:
-            obj = StudentInfo.objects.create(student_id=user,avatar='dummy.png')
+        if user.customer == True:
+            obj = Customer.objects.create(customer_id=user,avatar='dummy.png')
         else:
-            obj = ManagerInfo.objects.create(manager_id=user,avatar='dummy.png')
+            obj = Manager.objects.create(manager_id=user,avatar='dummy.png')
             user.is_active=False
         obj.save()
         # return redirect('home')

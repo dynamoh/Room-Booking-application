@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block content %}
+<style media="screen">
+  body{
+    overflow-x:hidden;
+    background-color:#F2F2F2;
+  }
+
+  .input_date{
+    border-radius:20px;
+    padding:8px 3px 8px 30px;
+    border:none;
+    background-color:white;
+    width:200px;
+    margin-right:40px;
+    margin-top:15px;
+  }
+
+  .input_date:hover{
+    border:none;
+  }
+
+  .custombtn{
+      border-color: #1492E6;
+      background: #1492E6;
+      box-shadow: 3px 3px 6px #00000029;
+      font-weight: 700;
+      border-radius: 2px;
+      word-spacing: 4px;
+      font-size: 15px;
+      color:white;
+      padding:13px 20px;
+      border:none;
+      margin-top: 15px;
+  }
+
+  .modal-dialog{
+    border-radius: 12px;
+  }
+
+  .modal-content{
+    padding:30px !important;
+  }
+
+  label{
+    text-align: left;
+    font: Regular 20px/24px Montserrat;
+    letter-spacing: 0;
+    color: #000000;
+    opacity: 1;
+    font-weight:500 !important;
+    margin-top:10px;
+  }
+
+  .edinpclass{
+    font-weight:500 !important;
+    background: #F2F2F6 0% 0% no-repeat padding-box !important;
+    border-radius: 12px !important;
+    opacity: 1;
+    margin-bottom:0px !important;
+    border:none;
+    padding:10px 3px 10px 20px;
+    width:100%;
+
+  }
+
+  a:hover{
+    text-decoration:none;
+  }
+
+  .site-navbar-wrap, .site-navbar{
+    background-color:white !important;
+  }
+
+  .site-navbar-wrap{
+    box-shadow:0px 1px 10px -5px;
+  }
+  
+</style>
+
+  <div class="" style="margin-top:20vh;margin-left:5vw;margin-bottom:8vh;">
+
+      {% for i in rooms_booked %}
+
+        <div class="row">
+
+          <div class="col-sm">
+            <div class="card" style="width: 18rem;box-shadow:0 10px 10px -5px;margin-top:35px;">
+
+              <img class="card-img-top" src="/media/{{i.room_timeslot_booked.room_id.room_pic}}" height="250" width="250" alt="Card image cap">
+              <div class="card-body" style="padding:5px;">
+                <p class="card-text" style="margin-left:30%;font-weight:bold;font-size:1.3em;padding:5px;text-transform:uppercase;">{{i.room_timeslot_booked.room_id.room_number}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm" style="margin-top:35px;;">
+            <p style="font-size:1.3em;">Booked On : {{i.booked_on}}</p>
+            <p style="font-size:1.3em;">Room Manager : {{i.room_timeslot_booked.room_id.room_manager.manager_id.name}}</p>
+            <h4 style="background-color:#f23a2e;font-size:1em;padding:10px 15px 10px 15px;border-radius:15px;color:white;font-weight:600;width:150px;margin-right:20px;">{{i.room_timeslot_booked.start_time}}  -  {{i.room_timeslot_booked.end_time}}</h4>
+          </div>
+
+        </div>
+
+      {% endfor %}
+
+  </div>
+
+
+{% endblock %}

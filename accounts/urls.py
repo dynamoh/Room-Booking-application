@@ -19,6 +19,7 @@ from django.contrib.auth.views import LoginView,LogoutView,PasswordResetView,Pas
 
 urlpatterns = [
     path('accounts/login/',login_user,name="loginpage"),
+    path('logout/', LogoutView.as_view(template_name='registration/logout.html/'),name='logoutpage', kwargs={'next_page':'homepage'}),
     path('activated/',activated,name="activatedpage"),
     path('activationerror/',not_activated,name="not_activatedpage"),
     path('accounts/signup/success/',signup_success,name="signup_success_page"),

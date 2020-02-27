@@ -7,9 +7,10 @@ from django.http import HttpResponseRedirect
 
 # Create your views here.
 
-@login_required
+
 def homepage(request):
-    return render(request,'home.html')
+    rooms = Room.objects.all()
+    return render(request,'index.html',{'room':rooms})
 
 @login_required
 def create_rooms(request):
@@ -59,6 +60,8 @@ def room_detail(request,slug):
             if i not in booked_timeslots:
                 available_slots.append(i)
         print(available_slots)
+        if len(available_slots)==0:
+            return render(request,'room_detail.html',{'date':day,'room':room,'no_slots':1,'start_date':start_date,'end_date':end_date})
         return render(request,'room_detail.html',{'date':day,'room':room,'avail_slots':available_slots,'start_date':start_date,'end_date':end_date})
     else:
         slots = TimeSlot.objects.filter(room_id=room)
@@ -75,11 +78,32 @@ def book_slot(request):
     RoomBooked.objects.create(room_timeslot_booked=timeslot,booked_for=booked_for,customer_booked=customer)
     return HttpResponseRedirect('/')
 
+def customer_profile(request):
+    customer = Customer.objects.filter(customer_id=request.user).first()
+    if request.method == 'POST':
+        email = request.POST.get('email_id')
+        full_name = request.POST.get('full_name')
+        contact = request.POST.get('contact')
+        profession = request.POST.get('profession')
+        address = request.POST.get('address')
+        city = request.POST.get('city')
+        profile_pic = request.FILES.get('profile_pic')
+        if profile_pic!="" and profile_pic!=None:
+            Customer.objects.filter(customer_id=request.user).update(contact=contact,profession=profession,address=address,city=city,profile_pic=profile_pic)
+        else:
+            Customer.objects.filter(customer_id=request.user).update(contact=contact,profession=profession,address=address,city=city)
 
+        customer = Customer.objects.filter(customer_id=request.user).first()
+    return render(request,'profile.html',{'customer':customer})
 
+def customer_bookings(request):
+    customer_id = Customer.objects.filter(customer_id=request.user).first()
+    customer_rooms_booked = RoomBooked.objects.filter(customer_booked=customer_id).order_by('-booked_on')
+    return render(request,'bookings.html',{'rooms_booked':customer_rooms_booked})
 
-
-
+def show_all_rooms(request):
+    rooms = Room.objects.all()
+    return render(request,'rooms.html',{'rooms':rooms})
 
 
 

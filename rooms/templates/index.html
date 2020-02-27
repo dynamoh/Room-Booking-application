@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <title>Room Booking</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700|Work+Sans:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'fonts/icomoon/style.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.7/build/mediaelementplayer.min.css">
+
+
+
+    <link rel="stylesheet" href="{% static 'fonts/flaticon/font/flaticon.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+  </head>
+  <body>
+
+  <div class="site-wrap">
+
+    <div class="site-mobile-menu">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close mt-3">
+          <span class="icon-close2 js-menu-toggle"></span>
+        </div>
+      </div>
+      <div class="site-mobile-menu-body"></div>
+    </div> <!-- .site-mobile-menu -->
+
+
+    <div class="site-navbar-wrap js-site-navbar bg-white">
+
+      <div class="container">
+        <div class="site-navbar bg-light">
+          <div class="py-1">
+            <div class="row align-items-center">
+              <div class="col-2">
+                <h2 class="mb-0 site-logo"><a href="{% url 'homepage' %}" style="display:flex;">Room <span style="color:#ffb307;" >Booking</span> </a></h2>
+              </div>
+              <div class="col-10">
+                <nav class="site-navigation text-right" role="navigation">
+                  <div class="container">
+
+                    <div class="d-inline-block d-lg-none  ml-md-0 mr-auto py-3"><a href="#" class="site-menu-toggle js-menu-toggle"><span class="icon-menu h3"></span></a></div>
+                    <ul class="site-menu js-clone-nav d-none d-lg-block">
+                      <li class="">
+                        <a href="index.html">Home</a>
+                      </li>
+                      <li class="">
+                        <a href="#about-us">About</a>
+
+                      </li>
+                      <li><a href="#rooms">Rooms</a></li>
+                      <li><a href="#contact-us">Contact</a></li>
+
+                      {% if user.is_authenticated %}
+                        <li><a href="{% url 'ProfilePage' %}">{{user.name}}</a></li>
+                        <li><a href="{% url 'logoutpage' %}">Logout</a></li>
+                      {% else %}
+                        <li><a href="{% url 'loginpage' %}">LogIn/SignUp</a></li>
+                      {% endif %}
+                    </ul>
+                  </div>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="slide-one-item home-slider owl-carousel">
+
+      <div class="site-blocks-cover overlay" style="background-image: url({% static 'images/hero_1.jpg' %});" data-aos="fade" data-stellar-background-ratio="0.5">
+        <div class="container">
+          <div class="row align-items-center justify-content-center">
+            <div class="col-md-7 text-center" data-aos="fade">
+
+              <h1 class="mb-2">Welcome To Suites</h1>
+              <h2 class="caption">Hotel &amp; Resort</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-blocks-cover overlay" style="background-image: url({% static 'images/hero_2.jpg' %});" data-aos="fade" data-stellar-background-ratio="0.5">
+        <div class="container">
+          <div class="row align-items-center justify-content-center">
+            <div class="col-md-7 text-center" data-aos="fade">
+              <h1 class="mb-2">Unique Experience</h1>
+              <h2 class="caption">Enjoy With Us</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-blocks-cover overlay" style="background-image: url({% static 'images/hero_3.jpg' %});" data-aos="fade" data-stellar-background-ratio="0.5">
+        <div class="container">
+          <div class="row align-items-center justify-content-center">
+            <div class="col-md-7 text-center" data-aos="fade">
+              <h1 class="mb-2">Relaxing Room</h1>
+              <h2 class="caption">Your Room, Your Stay</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <section id="about-us">
+      <div class="site-section bg-light">
+
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-md-6 mb-5 mb-md-0">
+
+                <div class="img-border">
+                  <a class="image-play">
+                    <img src="{% static 'images/img_2.jpg' %}" alt="" class="img-fluid">
+                  </a>
+                </div>
+
+                <img src="{% static 'images/img_1.jpg' %}" alt="Image" class="img-fluid image-absolute">
+
+            </div>
+            <div class="col-md-5 ml-auto">
+
+
+              <div class="section-heading text-left">
+                <h2 class="mb-5">About Us</h2>
+              </div>
+              <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque, nisi Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit nobis magni eaque velit eum, id rem eveniet dolor possimus voluptas..</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="rooms">
+      <div class="site-section ">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 mx-auto text-center mb-5 section-heading">
+              <h2 class="mb-5">Our Rooms</h2>
+            </div>
+          </div>
+          <div class="row">
+            {% for i in room|slice:":3" %}
+
+              <div class="col-md-6 col-lg-4 mb-5">
+                <div class="hotel-room text-center">
+                  {% if i.room_pic %}
+                  <a href="{% url 'Room_Detail' slug=i.slug %}" class="d-block mb-0 thumbnail"><img src="/media/{{i.room_pic}}" height="200px;" width="300px;" alt="Image" class="img-fluid"></a>
+                  {% else %}
+                  <a href="{% url 'Room_Detail' slug=i.slug %}" class="d-block mb-0 thumbnail"><img src="{% static 'images/img_2.jpg' %}" height="400px;" width="500px;" alt="Image" class="img-fluid"></a>
+                  {% endif %}
+                  <div class="hotel-room-body">
+                    <h3 class="heading mb-0"><a href="#">{{i.room_type}}</a></h3>
+                    <strong class="price"> ₹{{i.price}}.00 / per night</strong>
+                  </div>
+                </div>
+              </div>
+
+            {% endfor %}
+
+
+
+            <div style="margin-left:43%;">
+              <a href="{% url 'Rooms' %}" style="color:white;text-decoration:none;"><button type="button" class="btn btn-primary pill px-4 py-2" style="background-color:#ffb307 !important;border-color:#ffb307 !important;" name="button"> Show More </button></a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact-us" >
+      <div class="site-section site-section-sm bg-light">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 mx-auto text-center mb-5 section-heading">
+              <h2 class="mb-2">Contact Us</h2>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 col-lg-8 mb-5">
+              <form action="#" class="p-5 bg-light">
+                <div class="row form-group">
+                  <div class="col-md-12 mb-3 mb-md-0">
+                    <label class="font-weight-bold" for="fullname">Full Name</label>
+                    <input type="text" id="fullname" class="form-control" placeholder="Full Name">
+                  </div>
+                </div>
+                <div class="row form-group">
+                  <div class="col-md-12">
+                    <label class="font-weight-bold" for="email">Email</label>
+                    <input type="email" id="email" class="form-control" placeholder="Email Address">
+                  </div>
+                </div>
+                <div class="row form-group">
+                  <div class="col-md-12 mb-3 mb-md-0">
+                    <label class="font-weight-bold" for="phone">Phone</label>
+                    <input type="text" id="phone" class="form-control" placeholder="Phone #">
+                  </div>
+                </div>
+
+                <div class="row form-group">
+                  <div class="col-md-12">
+                    <label class="font-weight-bold" for="message">Message</label>
+                    <textarea name="message" id="message" cols="30" rows="5" class="form-control" placeholder="Say hello to us"></textarea>
+                  </div>
+                </div>
+
+                <div class="row form-group">
+                  <div class="col-md-12">
+                    <input type="submit" value="Send Message" style="background-color:#ffb307 !important;border-color:#ffb307 !important;" class="btn btn-primary pill px-4 py-2">
+                  </div>
+                </div>
+
+
+              </form>
+            </div>
+
+            <div class="col-lg-4">
+              <div class="p-4 mb-3 bg-light">
+                <h3 class="h5 text-black mb-3">Contact Info</h3>
+                <p class="mb-0 font-weight-bold">Address</p>
+                <p class="mb-4">203 Fake St. Mountain View, San Francisco, California, USA</p>
+
+                <p class="mb-0 font-weight-bold">Phone</p>
+                <p class="mb-4"><a href="#">+1 232 3235 324</a></p>
+
+                <p class="mb-0 font-weight-bold">Email Address</p>
+                <p class="mb-0"><a href="#">guptaheet53@gmail.com</a></p>
+
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="container" style="height:50px !important;">
+        <div class="row text-center">
+          <div class="col-md-12">
+            <p>
+
+            Copyright &copy;  Heet Gupta
+
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+  <script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
+  <script src="{% static 'js/jquery-ui.js' %}"></script>
+  <script src="{% static 'js/popper.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'js/jquery.stellar.min.js' %}"></script>
+  <script src="{% static 'js/jquery.countdown.min.js' %}"></script>
+  <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
+  <script src="{% static 'js/aos.js' %}"></script>
+
+
+  <script src="{% static 'js/mediaelement-and-player.min.js' %}"></script>
+
+  <script src="{% static 'js/main.js' %}"></script>
+
+
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+                var mediaElements = document.querySelectorAll('video, audio'), total = mediaElements.length;
+
+                for (var i = 0; i < total; i++) {
+                    new MediaElementPlayer(mediaElements[i], {
+                        pluginPath: 'https://cdn.jsdelivr.net/npm/mediaelement@4.2.7/build/',
+                        shimScriptAccess: 'always',
+                        success: function () {
+                            var target = document.body.querySelectorAll('.player'), targetTotal = target.length;
+                            for (var j = 0; j < targetTotal; j++) {
+                                target[j].style.visibility = 'visible';
+                            }
+                  }
+                });
+                }
+            });
+    </script>
+
+  </body>
+</html>
