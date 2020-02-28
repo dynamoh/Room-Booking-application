@@ -123,11 +123,11 @@
           <p style="font-size:1.8em;">Available Slots on {{date}}</p>
           {% for i in avail_slots %}
           {% if user.is_authenticated %}
-          <button type="button" style="background-color:#f23a2e;font-size:1.3em;padding:10px 15px 10px 15px;border-radius:15px;color:white;font-weight:600;width:150px;margin-right:20px;border:none;" data-toggle="modal" data-target="#exampleModal{{forloop.counter}}">
+          <button type="button" style="background-color:#f23a2e;font-size:1.3em;margin-bottom:10px;padding:10px 15px 10px 15px;border-radius:15px;color:white;font-weight:600;width:150px;margin-right:20px;border:none;" data-toggle="modal" data-target="#exampleModal{{forloop.counter}}">
             {{i.start_time}}  -  {{i.end_time}}
           </button>
           {% else %}
-          <button type="button" style="background-color:#f23a2e;font-size:1.3em;padding:10px 15px 10px 15px;border-radius:15px;color:white;font-weight:600;width:150px;margin-right:20px;border:none;" data-toggle="modal" data-target="#exampleModallogin{{forloop.counter}}">
+          <button type="button" style="background-color:#f23a2e;font-size:1.3em;margin-bottom:10px;padding:10px 15px 10px 15px;border-radius:15px;color:white;font-weight:600;width:150px;margin-right:20px;border:none;" data-toggle="modal" data-target="#exampleModallogin{{forloop.counter}}">
             {{i.start_time}}  -  {{i.end_time}}
           </button>
           {% endif %}

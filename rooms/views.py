@@ -87,30 +87,40 @@ def book_slot(request):
 
 @login_required
 def customer_profile(request):
-    if request.user.customer == True:
-        customer = Customer.objects.filter(customer_id=request.user).first()
-        if request.method == 'POST':
-            email = request.POST.get('email_id')
-            full_name = request.POST.get('full_name')
-            contact = request.POST.get('contact')
-            profession = request.POST.get('profession')
-            address = request.POST.get('address')
-            city = request.POST.get('city')
-            profile_pic = request.FILES.get('profile_pic')
-            print(profile_pic)
-            if profile_pic!="" and profile_pic!=None:
-                if profile_pic != None:
-                    fs = FileSystemStorage()
-                    filename = fs.save(profile_pic.name, profile_pic)
-                    uploaded_file_url = fs.url(filename)
-                    print(uploaded_file_url)
+    if request.user.customer:
+        logged_user = Customer.objects.filter(customer_id=request.user).first()
+    else:
+        logged_user = Manager.objects.filter(manager_id=request.user).first()
+    if request.method == 'POST':
+        email = request.POST.get('email_id')
+        full_name = request.POST.get('full_name')
+        contact = request.POST.get('contact')
+        profession = request.POST.get('profession')
+        address = request.POST.get('address')
+        city = request.POST.get('city')
+        profile_pic = request.FILES.get('profile_pic')
+        print(profile_pic)
+        if profile_pic!="" and profile_pic!=None:
+            if profile_pic != None:
+                fs = FileSystemStorage()
+                filename = fs.save(profile_pic.name, profile_pic)
+                uploaded_file_url = fs.url(filename)
+                print(uploaded_file_url)
+            if request.user.customer:
                 Customer.objects.filter(customer_id=request.user).update(contact=contact,profession=profession,address=address,city=city,profile_pic=profile_pic)
             else:
+                Manager.objects.filter(customer_id=request.user).update(contact=contact,address=address,city=city,profile_pic=profile_pic)
+        else:
+            if request.user.customer:
                 Customer.objects.filter(customer_id=request.user).update(contact=contact,profession=profession,address=address,city=city)
+            else:
+                Manager.objects.filter(manager_id=request.user).update(contact=contact,address=address,city=city)
 
-            customer = Customer.objects.filter(customer_id=request.user).first()
-        return render(request,'profile.html',{'customer':customer})
-    return HttpResponseRedirect('/')
+        if request.user.customer:
+            logged_user = Customer.objects.filter(customer_id=request.user).first()
+        else:
+            logged_user = Manager.objects.filter(manager_id=request.user).first()
+    return render(request,'profile.html',{'logged_user':logged_user})
 
 @login_required
 def customer_bookings(request):
@@ -210,7 +220,12 @@ def manager_booking_details(request,slug):
         return render(request,'manager_bookings.html',{'bookings':bookings,'room':room})
     return HttpResponseRedirect('/')
 
-
+def delete_room(request):
+    if request.user.manager == True:
+        room_no = request.POST.get('room_no')
+        Room.objects.filter(room_number=room_no).delete()
+        return HttpResponseRedirect('/manager/rooms')
+    return HttpResponseRedirect('/')
 
 
 

@@ -65,7 +65,11 @@
 
                       </li>
                       <li><a href="#rooms">Rooms</a></li>
+                      {% if user.manager %}
+                      <li> <a href="{% url 'Add_Room' %}">Create Room</a> </li>
+                      {% else %}
                       <li><a href="#contact-us">Contact</a></li>
+                      {% endif %}
                       {% if user.manager %}
                       <li> <a href="{% url 'ManagerRooms' %}">My Rooms</a> </li>
                       {% endif %}

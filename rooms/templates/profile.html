@@ -64,8 +64,8 @@
     <div class="row" style="margin-top:120px;margin-left:5vw;margin-right:5vw;margin-bottom:8vh;">
       <div class="col-sm">
         <div class="card" style="width: 18rem;box-shadow:0 10px 10px -5px;margin-top:35px;">
-          {% if customer.profile_pic %}
-            <img class="card-img-top" src="/media/{{customer.profile_pic}}" height="250" width="250" alt="Card image cap">
+          {% if logged_user.profile_pic %}
+            <img class="card-img-top" src="/media/{{logged_user.profile_pic}}" height="250" width="250" alt="Card image cap">
           {% else %}
             <img class="card-img-top" src="{% static 'images/dummy.png' %}" height="250" width="250" alt="Card image cap">
           {% endif %}
@@ -73,7 +73,9 @@
             <p class="card-text" style="margin-left:30%;font-weight:bold;font-size:1.3em;padding:5px;text-transform:uppercase;">{{user.name}}</p>
           </div>
         </div>
+        {% if user.customer %}
         <a href="{% url 'PreviousBookings' %}"><button type="button" class="custombtn" style="width:18rem;margin-top:50px;;" name="button">Show All Bookings</button></a>
+        {% endif %}
       </div>
 
       <div class="col-sm">
@@ -82,33 +84,43 @@
             <div class="row">
               <div class="col-sm">
                 <label>Email</label><br>
-                <input type="text" readonly name="email_id" value="{{customer.customer_id.email}}">
+                {% if user.customer %}
+                <input type="text" readonly name="email_id" value="{{logged_user.customer_id.email}}">
+                {% else %}
+                <input type="text" readonly name="email_id" value="{{logged_user.manager_id.email}}">
+                {% endif %}
               </div>
               <div class="col-sm">
                 <label>Full Name</label><br>
-                <input type="text" readonly name="full_name" value="{{customer.customer_id.name}}">
+                {% if user.customer %}
+                <input type="text" readonly name="full_name" value="{{logged_user.customer_id.name}}">
+                {% else %}
+                <input type="text" readonly name="full_name" value="{{logged_user.manager_id.name}}">
+                {% endif %}
               </div>
             </div>
 
             <div class="row">
               <div class="col-sm">
                 <label>Contact</label><br>
-                <input type="text" name="contact" value="{{customer.contact}}">
+                <input type="text" name="contact" value="{{logged_user.contact}}">
               </div>
+              {% if user.customer %}
               <div class="col-sm">
                 <label>Profession</label><br>
-                <input type="text" name="profession" value="{{customer.profession}}">
+                <input type="text" readonly name="profession" value="{{logged_user.profession}}">
               </div>
+              {% endif %}
             </div>
 
             <div class="row">
               <div class="col-sm">
                 <label>Address</label><br>
-                <input type="text" name="address" value="{{customer.address}}">
+                <input type="text" name="address" value="{{logged_user.address}}">
               </div>
               <div class="col-sm">
                 <label>City</label><br>
-                <input type="text" name="city" value="{{customer.city}}">
+                <input type="text" name="city" value="{{logged_user.city}}">
               </div>
             </div>
 

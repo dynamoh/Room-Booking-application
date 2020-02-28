@@ -226,12 +226,9 @@
       }
 
       function create_room(){
-        alert("clicked");
         var start_time_list = document.getElementsByClassName('timeslot_start_time');
         var end_time_list = document.getElementsByClassName('timeslot_end_time');
-        alert(start_time_list);
         var stl = start_time_list.length;
-        alert(stl);
         for(var i=0;i<stl;i++){
           var sk = `<input type="time" name='fn_start_time' value="`+ start_time_list[i].innerHTML +`">`;
           var ek = `<input type="time" name='fn_end_time' value="`+ end_time_list[i].innerHTML +`">`;
@@ -239,7 +236,6 @@
           $('#final_timeslots').append(sk);
           $('#final_timeslots').append(ek);
         }
-        alert("done");
         $('#create_room_form').submit();
       }
 

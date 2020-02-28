@@ -180,8 +180,21 @@
         </div>
         </div>
 
-        <a href="{% url 'BookingDetails' slug=room.slug %}"><button class="custombtn" type="button" name="button">View Booking details</button></a> 
+        <a href="{% url 'BookingDetails' slug=room.slug %}"><button class="custombtn" type="button" name="button">View Booking details</button></a>
+        <a data-toggle="modal" data-target="#exampleModaldeleteroom" style="color:white;cursor:pointer" class="custombtn"  > Delete Room </a>
 
+        <div class="modal fade" id="exampleModaldeleteroom" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content" id="eddetailsform" align="center">
+            <h3>Delete Room</h3><hr>
+            <p>Are you sure you want to delete the room.</p>
+            <form action="{% url 'DeleteRoom' %}" method="POST">{% csrf_token %}
+              <input type="text" hidden name="room_no" value="{{room.room_number}}">
+              <button type="submit" class="custombtn" name="button" style="width:100%;">Delete Room</button>
+            </form>
+            </div>
+        </div>
+        </div>
       </div>
     </div>
 
