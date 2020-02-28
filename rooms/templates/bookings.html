@@ -82,7 +82,7 @@
 
 </style>
 
-  <div class="" style="margin-top:20vh;margin-left:5vw;margin-bottom:8vh;">
+  <div class="" style="margin-top:120px;margin-left:5vw;margin-bottom:8vh;">
     <div class="row">
       <div class="col-md-6 mx-auto text-center mb-2 section-heading">
         <h2 class="mb-5">Future Bookings</h2>
@@ -120,6 +120,7 @@
                     <input type="text" hidden name="start_time" value="{{i.room_timeslot_booked.start_time}}">
                     <input type="text" hidden name="end_time" value="{{i.room_timeslot_booked.end_time}}">
                     <input type="text" hidden name="room_no" value="{{i.room_timeslot_booked.room_id.room_number}}">
+                    <input type="text" hidden name="booked_for" value="{{i.booked_for|date:'Y-m-d'}}">
                     <button type="submit" class="custombtn" name="button" style="width:100%;">Cancel Booking</button>
                   </form>
                   </div>
@@ -135,7 +136,7 @@
 
       <div class="row">
         <div class="col-md-6 mx-auto text-center mb-2 section-heading">
-          <h2 class="mb-5">Past Bookings</h2>
+          <h2 class="mb-5 mt-5">Past Bookings</h2>
         </div>
       </div>
 

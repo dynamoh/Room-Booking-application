@@ -57,7 +57,7 @@
       margin-top:10px;
     }
 
-    .edinpclass{
+    .edinpclass, input{
       font-weight:500 !important;
       background: #F2F2F6 0% 0% no-repeat padding-box !important;
       border-radius: 12px !important;
@@ -96,109 +96,91 @@
       <div class="col-sm" style="margin-right:5vw;margin-top:15px;">
 
         <p style="font-size:1.8em;">Room Manager : {{room.room_manager.manager_id.name}}</p>
-        <form method="post">{% csrf_token %}
-          <div class="row" style="margin-bottom:80px;">
-            <input type="date" class="input_date" name="check_day" min="{{start_date}}" max="{{end_date}}"><br>
-            <button type="submit" class="custombtn" name="button">Check Availaibility</button>
-          </div>
-
-        </form>
-
-        {% if no_slots %}
-          <p style="font-size:1.4em;margin-bottom:30px;color:red;">Sorry!! All slots for Room {{room.room_number}} on {{date}} are booked.</p>
-        {% endif %}
-
         {% if slots %}
         <p style="font-size:1.8em;margin-bottom:30px;">All Slots for Room {{room.room_number}}</p>
         <div class="row" style="margin-left:0px;">
         {% for i in slots %}
 
-          <h4 style="background-color:#f23a2e;font-size:1.3em;padding:10px 15px 10px 15px;border-radius:15px;color:white;font-weight:600;width:150px;margin-right:20px;">{{i.start_time}}  -  {{i.end_time}}</h4>
-
+          <h4 style="position:relative;background-color:#f23a2e;font-size:1.3em;padding:10px 15px 10px 15px;border-radius:15px;color:white;font-weight:600;width:180px;margin-right:20px;">
+            {{i.start_time}}  -  {{i.end_time}} <span data-toggle="modal" data-target="#exampleModaldelete{{forloop.counter}}" style="position:absolute;right:0px;top:3px;background-color:white;padding:7px 12px 7px 12px;color:#f23a2e;cursor:pointer;border-radius:50%;" > X </span>
+          </h4>
+          <div class="modal fade" id="exampleModaldelete{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" id="eddetailsform" align="center">
+              <h3>Delete Slot</h3><hr>
+              <p>Are you sure you want to delete the slot.</p>
+              <form action="{% url 'DeleteTimeslot' %}" method="POST">{% csrf_token %}
+                <input type="text" hidden name="start_time" value="{{i.start_time}}">
+                <input type="text" hidden name="end_time" value="{{i.end_time}}">
+                <input type="text" hidden name="room_no" value="{{i.room_id.room_number}}">
+                <button type="submit" class="custombtn" name="button" style="width:100%;">Remove Slot</button>
+              </form>
+              </div>
+          </div>
+          </div>
           {% endfor %}
         </div>
         {% endif %}
 
-        {% if avail_slots %}
-          <p style="font-size:1.8em;">Available Slots on {{date}}</p>
-          {% for i in avail_slots %}
-          {% if user.is_authenticated %}
-          <button type="button" style="background-color:#f23a2e;font-size:1.3em;padding:10px 15px 10px 15px;border-radius:15px;color:white;font-weight:600;width:150px;margin-right:20px;border:none;" data-toggle="modal" data-target="#exampleModal{{forloop.counter}}">
-            {{i.start_time}}  -  {{i.end_time}}
-          </button>
-          {% else %}
-          <button type="button" style="background-color:#f23a2e;font-size:1.3em;padding:10px 15px 10px 15px;border-radius:15px;color:white;font-weight:600;width:150px;margin-right:20px;border:none;" data-toggle="modal" data-target="#exampleModallogin{{forloop.counter}}">
-            {{i.start_time}}  -  {{i.end_time}}
-          </button>
-          {% endif %}
+        <button type="button" class="custombtn" style="width:180px;" name="button" data-toggle="modal" data-target="#exampleModaledit">
+          Edit Room details
+        </button>
 
-          <div class="modal fade" id="exampleModallogin{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content" id="eddetailsform" align="center">
-              <h3>Login Required</h3><hr>
-              <p>Please Login to book a room.</p>
-
-              <a href="{% url 'loginpage' %}"><button type="button" class="custombtn" style="width:100%;" name="button">Login/SignUp</button></a>
-            </div>
-          </div>
-          </div>
-
-
-
-
-          <div class="modal fade" id="exampleModal{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content" id="eddetailsform">
-              <form action="{% url 'Book_Room' %}"  method="POST">{% csrf_token %}
-                <h3>Confirm Booking</h3><hr>
+        <div class="modal fade" id="exampleModaledit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content" id="eddetailsform" >
+            <h3>Edit Room details</h3><hr>
+            <form method="POST" action="{% url 'EditRoomDetails' %}" enctype="multipart/form-data">{% csrf_token %}
 
                 <div class="row">
                   <div class="col-sm">
                     <label>Room Number</label><br>
-                    <input type="text" name="room_number" class="edinpclass" readonly value="{{room.room_number}}" >
+                    <input type="text" readonly name="room_number" value="{{room.room_number}}">
                   </div>
                   <div class="col-sm">
-                    <label>Booked for</label><br>
-                      <input type="text" readonly name="booked_for" class="edinpclass" value="{{date}}">
+                    <label>Room Manager</label><br>
+                    <input type="text" readonly name="full_name" value="{{room.room_manager.manager_id.name}}">
                   </div>
-                </div>
-
-                <input type="text" name="start_time" hidden value="{{i.start_time}}">
-                <input type="text" name="end_time" hidden value="{{i.end_time}}">
-
-
-
-
-                <div class="row">
-
                 </div>
 
                 <div class="row">
                   <div class="col-sm">
-                    <label>Time Slot</label><br>
-                      <input type="text" readonly class="edinpclass" name="slot" value="{{i.start_time}} - {{i.end_time}}">
+                    <label>Room Type</label>
+                    <select class="edinpclass" name="room_type" required>
+                      <option value="{{room.room_type}}">{{room.room_type}}</option>
+                      <option value="Single Room">Single Room</option>
+                      <option value="Family Room">Family Room</option>
+                      <option value="Delux Suite">Delux Suite</option>
+                    </select>
                   </div>
                   <div class="col-sm">
-                    <label>Price</label><br>
-                      <input type="text" readonly class="edinpclass" name="price" value="₹{{room.price}}.00 / per night">
+                    <label>Price/night</label>
+                    <input type="number" min="1000" name="price" required value="{{room.price}}">
                   </div>
                 </div>
 
-                <br>
-                <button type="submit" class="custombtn" style="width:100%;" name="button"> Book Room </button>
-              </form>
+                <div class="row">
+                  <div class="col-sm">
+                    <label>Number of days before which booking is allowed</label>
+                    <input type="number" name="prior_booking_days" required value="{{room.prior_booking_days}}"><br><br>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm">
+                    <label>Room Picture</label>
+                    <input type="file" name="room_pic" placeholder="Room Picture"><br><br>
+                  </div>
+                </div>
+
+                <button type="submit" class="custombtn" style="width:100%;" name="button">Save Changes</button>
+
+            </form>
             </div>
-          </div>
-          </div>
+        </div>
+        </div>
 
-
-          {% endfor %}
-        {% endif %}
-        {% if no_slots %}
-        <p></p>
-        {% else %}
-        <p style="color:red;font-size:0.8em;margin-top:25px;">*Select a day and click on a timeslot to book that timeslot for the selected day.</p>
-        {% endif %}
+        <a href="{% url 'BookingDetails' slug=room.slug %}"><button class="custombtn" type="button" name="button">View Booking details</button></a> 
 
       </div>
     </div>

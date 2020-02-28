@@ -18,6 +18,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse,Http404
 
 from .models import User
 from .forms import RegisterForm
+from .tokens import account_activation_token
 from rooms.models import Customer,Manager
 # Create your views here.
 
@@ -78,10 +79,18 @@ def signup(request):
         if obj:
             return render(request,'signup_failure_page.html',{'message':'This Email has already been taken!!'})
         if form.is_valid():
+            desig = request.POST.get('desig')
+
             user = form.save(commit=False)
             print("aagaya")
             user.is_active = False
             user.set_password(form.cleaned_data.get('password'))
+            if desig == 'customer':
+                user.manager = False
+                user.customer= True
+            else:
+                user.manager = True
+                user.customer= False
             user.save()
             user.refresh_from_db()
             current_site = get_current_site(request)
@@ -99,6 +108,7 @@ def signup(request):
                         mail_subject, message, to=[to_email]
             )
             email.send()
+
             return redirect('signup_success_page')
         else:
             return render(request,'signup_failure_page.html',{'message':'You have not been registered. Your Passwords doesnt match!!'})

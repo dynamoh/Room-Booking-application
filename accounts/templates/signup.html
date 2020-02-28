@@ -157,8 +157,19 @@
       <div class="mainform">
         <form class="supformhtml" id="Signupform"  method="POST">{% csrf_token %}
 
-          <input type="radio" name="desig" hidden checked value="student" >
-          <input type="radio" name="desig" hidden value="manager">
+          <div class="row" style="margin-top:20px;">
+            <div class="col-sm">
+              <label>Customer</label>
+              <input type="radio" name="desig"  checked value="customer" >
+            </div>
+
+            <div class="col-sm">
+              <label>Manager</label>
+              <input type="radio" name="desig"  value="manager">
+            </div>
+          </div>
+
+
 
           {% for field in form %}
 

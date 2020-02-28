@@ -30,7 +30,7 @@ def create_rooms(request):
         print(end_times)
         for i in range(0,len(start_times)):
             TimeSlot.objects.create(room_id=obj_room,start_time=str(start_times[i]),end_time=str(end_times[i]))
-
+        return HttpResponseRedirect('/manager/rooms/')
     return render(request,'create_room.html')
 
 
@@ -38,6 +38,7 @@ def create_rooms(request):
 def show_rooms(request):
     rooms = Room.objects.all()
     return render(request,'show_rooms.html',{'rooms':rooms})
+
 
 def room_detail(request,slug):
     room = get_object_or_404(Room, slug=slug)
@@ -70,47 +71,56 @@ def room_detail(request,slug):
         slots = TimeSlot.objects.filter(room_id=room)
         return render(request,'room_detail.html',{'room':room,'slots':slots,'start_date':start_date,'end_date':end_date})
 
+@login_required
 def book_slot(request):
-    room_no = request.POST.get('room_number')
-    start_time = request.POST.get('start_time')
-    end_time = request.POST.get('end_time')
-    booked_for = request.POST.get('booked_for')
-    room = Room.objects.filter(room_number = room_no).first()
-    timeslot = TimeSlot.objects.filter(room_id=room).filter(start_time=start_time).filter(end_time=end_time).first()
-    customer = Customer.objects.filter(customer_id=request.user).first()
-    RoomBooked.objects.create(room_timeslot_booked=timeslot,booked_for=booked_for,customer_booked=customer)
+    if request.user.customer == True:
+        room_no = request.POST.get('room_number')
+        start_time = request.POST.get('start_time')
+        end_time = request.POST.get('end_time')
+        booked_for = request.POST.get('booked_for')
+        room = Room.objects.filter(room_number = room_no).first()
+        timeslot = TimeSlot.objects.filter(room_id=room).filter(start_time=start_time).filter(end_time=end_time).first()
+        customer = Customer.objects.filter(customer_id=request.user).first()
+        RoomBooked.objects.create(room_timeslot_booked=timeslot,booked_for=booked_for,customer_booked=customer)
+        return HttpResponseRedirect('/bookings/')
     return HttpResponseRedirect('/')
 
+@login_required
 def customer_profile(request):
-    customer = Customer.objects.filter(customer_id=request.user).first()
-    if request.method == 'POST':
-        email = request.POST.get('email_id')
-        full_name = request.POST.get('full_name')
-        contact = request.POST.get('contact')
-        profession = request.POST.get('profession')
-        address = request.POST.get('address')
-        city = request.POST.get('city')
-        profile_pic = request.FILES.get('profile_pic')
-        print(profile_pic)
-        if profile_pic!="" and profile_pic!=None:
-            if profile_pic != None:
-                fs = FileSystemStorage()
-                filename = fs.save(profile_pic.name, profile_pic)
-                uploaded_file_url = fs.url(filename)
-                print(uploaded_file_url)
-            Customer.objects.filter(customer_id=request.user).update(contact=contact,profession=profession,address=address,city=city,profile_pic=profile_pic)
-        else:
-            Customer.objects.filter(customer_id=request.user).update(contact=contact,profession=profession,address=address,city=city)
-
+    if request.user.customer == True:
         customer = Customer.objects.filter(customer_id=request.user).first()
-    return render(request,'profile.html',{'customer':customer})
+        if request.method == 'POST':
+            email = request.POST.get('email_id')
+            full_name = request.POST.get('full_name')
+            contact = request.POST.get('contact')
+            profession = request.POST.get('profession')
+            address = request.POST.get('address')
+            city = request.POST.get('city')
+            profile_pic = request.FILES.get('profile_pic')
+            print(profile_pic)
+            if profile_pic!="" and profile_pic!=None:
+                if profile_pic != None:
+                    fs = FileSystemStorage()
+                    filename = fs.save(profile_pic.name, profile_pic)
+                    uploaded_file_url = fs.url(filename)
+                    print(uploaded_file_url)
+                Customer.objects.filter(customer_id=request.user).update(contact=contact,profession=profession,address=address,city=city,profile_pic=profile_pic)
+            else:
+                Customer.objects.filter(customer_id=request.user).update(contact=contact,profession=profession,address=address,city=city)
 
+            customer = Customer.objects.filter(customer_id=request.user).first()
+        return render(request,'profile.html',{'customer':customer})
+    return HttpResponseRedirect('/')
+
+@login_required
 def customer_bookings(request):
-    customer_id = Customer.objects.filter(customer_id=request.user).first()
-    date = datetime.now().date()
-    previous_bookings = RoomBooked.objects.filter(customer_booked=customer_id).filter(booked_for__lte=date).order_by('-booked_on')
-    future_bookings = RoomBooked.objects.filter(customer_booked=customer_id).filter(booked_for__gte=date).order_by('-booked_on')
-    return render(request,'bookings.html',{'previous_bookings':previous_bookings,'future_bookings':future_bookings})
+    if request.user.customer == True:
+        customer_id = Customer.objects.filter(customer_id=request.user).first()
+        date = datetime.now().date()
+        previous_bookings = RoomBooked.objects.filter(customer_booked=customer_id).filter(booked_for__lte=date).order_by('-booked_on')
+        future_bookings = RoomBooked.objects.filter(customer_booked=customer_id).filter(booked_for__gte=date).order_by('-booked_on')
+        return render(request,'bookings.html',{'previous_bookings':previous_bookings,'future_bookings':future_bookings})
+    return HttpResponseRedirect('/')
 
 def show_all_rooms(request):
     rooms = Room.objects.all()
@@ -125,16 +135,90 @@ def contact_us_add(request):
         ContactUs.objects.create(full_name=full_name,email=email,phone=phone,message=message)
     return HttpResponseRedirect('/')
 
+@login_required
 def cancel_booking(request):
-    if request.method == 'POST':
+    if request.user.customer == True:
+        if request.method == 'POST':
+            start_time = request.POST.get('start_time')
+            end_time = request.POST.get('end_time')
+            room_no = request.POST.get('room_no')
+            booked_for = request.POST.get('booked_for')
+            cust = Customer.objects.filter(customer_id=request.user).first()
+            room = Room.objects.filter(room_number=room_no).first()
+            timeslot = TimeSlot.objects.filter(room_id=room).filter(start_time=start_time).filter(end_time=end_time).first()
+            RoomBooked.objects.filter(customer_booked=cust).filter(room_timeslot_booked=timeslot).filter(booked_for=booked_for).delete()
+        return HttpResponseRedirect('/bookings/')
+    return HttpResponseRedirect('/')
+
+@login_required
+def rooms_created_by_manager(request):
+    if request.user.manager == True:
+        manager = Manager.objects.filter(manager_id = request.user).first()
+        room = Room.objects.filter(room_manager=manager)
+        return render(request,'manager_rooms.html',{'room':room})
+    return HttpResponseRedirect('/')
+
+@login_required
+def manager_rooms_detail(request,slug):
+    if request.user.manager == True:
+        room = get_object_or_404(Room, slug=slug)
+        day = request.POST.get('check_day')
+        print(day)
+        start_date = datetime.now().strftime ("%Y-%m-%d")
+        date = datetime.strptime(start_date, "%Y-%m-%d")
+        end_date = date + timedelta(days=room.prior_booking_days)
+        end_date=datetime.strftime(end_date, "%Y-%m-%d")
+        slots = TimeSlot.objects.filter(room_id=room)
+        return render(request,'manager_room_detail.html',{'room':room,'slots':slots,'start_date':start_date,'end_date':end_date})
+    return HttpResponseRedirect('/')
+
+@login_required
+def delete_timeslot(request):
+    if request.user.manager == True:
         start_time = request.POST.get('start_time')
         end_time = request.POST.get('end_time')
         room_no = request.POST.get('room_no')
-        cust = Customer.objects.filter(customer_id=request.user).first()
         room = Room.objects.filter(room_number=room_no).first()
-        timeslot = TimeSlot.objects.filter(room_id=room).filter(start_time=start_time).filter(end_time=end_time).first()
-        RoomBooked.objects.filter(customer_booked=cust).filter(room_timeslot_booked=timeslot).delete()
-    return HttpResponseRedirect('/bookings/')
+        TimeSlot.objects.filter(room_id=room).filter(start_time=start_time).filter(end_time=end_time).delete()
+        print(room_no)
+        return HttpResponseRedirect('/manager/rooms/')
+    return HttpResponseRedirect('/')
+
+@login_required
+def edit_room_details(request):
+    if request.user.manager == True:
+        if request.method == 'POST':
+            manager = Manager.objects.filter(manager_id = request.user).first()
+            room_number = request.POST.get('room_number')
+            room_type = request.POST.get('room_type')
+            price = request.POST.get('price')
+            room_pic = request.FILES.get('room_pic')
+            prior_days = request.POST.get('prior_booking_days')
+            if room_pic!="" and room_pic!=None:
+                Room.objects.filter(room_number=room_number).update(room_type=room_type,price=price,prior_booking_days=prior_days,room_pic=room_pic)
+            else:
+                Room.objects.filter(room_number=room_number).update(room_type=room_type,price=price,prior_booking_days=prior_days)
+        return HttpResponseRedirect('/manager/rooms/')
+    return HttpResponseRedirect('/')
+
+@login_required
+def manager_booking_details(request,slug):
+    if request.user.manager == True:
+        room = get_object_or_404(Room, slug=slug)
+        timeslot = TimeSlot.objects.filter(room_id=room).first()
+        bookings = RoomBooked.objects.filter(room_timeslot_booked=timeslot).order_by('-booked_for')
+        return render(request,'manager_bookings.html',{'bookings':bookings,'room':room})
+    return HttpResponseRedirect('/')
+
+
+
+
+
+
+
+
+
+
 
 
 

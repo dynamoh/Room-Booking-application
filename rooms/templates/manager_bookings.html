@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style media="screen">
+  .site-navbar-wrap{
+    box-shadow:0px 1px 10px -5px;
+  }
+</style>
+
+    <div style="margin-top:120px;margin-left:5vw;margin-right:5vw;margin-bottom:8vh;color:black;">
+      <div class="row">
+        <div class="col-md-6 mx-auto text-center mb-2 section-heading">
+          <h2 class="mb-5">Booking details for {{room.room_number}}</h2>
+        </div>
+      </div>
+
+      <table class="table table-striped">
+        <th scope="col">#</th>
+        <th scope="col">Date</th>
+        <th scope="col">Slot</th>
+        <th scope="col">Booked by</th>
+        <th scope="col">Booked on</th>
+
+        {% for i in bookings %}
+
+          <tr scope="row">
+            <td>{{forloop.counter}}</td>
+            <td>{{i.booked_for}}</td>
+            <td>{{i.room_timeslot_booked.start_time}} - {{i.room_timeslot_booked.end_time}}</td>
+            <td>{{i.customer_booked.customer_id.name}}</td>
+            <td>{{i.booked_on}}</td>
+          </tr>
+
+        {% endfor %}
+
+      </table>
+    </div>
+
+{% endblock %}

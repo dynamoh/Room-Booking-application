@@ -66,7 +66,9 @@
                       </li>
                       <li><a href="#rooms">Rooms</a></li>
                       <li><a href="#contact-us">Contact</a></li>
-
+                      {% if user.manager %}
+                      <li> <a href="{% url 'ManagerRooms' %}">My Rooms</a> </li>
+                      {% endif %}
                       {% if user.is_authenticated %}
                         <li><a href="{% url 'ProfilePage' %}">{{user.name}}</a></li>
                         <li><a href="{% url 'logoutpage' %}">Logout</a></li>
@@ -91,7 +93,7 @@
           <div class="row align-items-center justify-content-center">
             <div class="col-md-7 text-center" data-aos="fade">
 
-              <h1 class="mb-2">Welcome To Suites</h1>
+              <h1 class="mb-2">Book Your Room.</h1>
               <h2 class="caption">Hotel &amp; Resort</h2>
             </div>
           </div>
@@ -164,13 +166,13 @@
             {% for i in room|slice:":3" %}
 
               <div class="col-md-6 col-lg-4 mb-5">
-                <div class="hotel-room text-center">
+                <div class="hotel-room text-center" style="height:390px;width:300px;position:relative;box-shadow:0px 10px 10px -8px;">
                   {% if i.room_pic %}
-                  <a href="{% url 'Room_Detail' slug=i.slug %}" class="d-block mb-0 thumbnail"><img src="/media/{{i.room_pic}}" height="200px;" width="300px;" alt="Image" class="img-fluid"></a>
+                  <a href="{% url 'Room_Detail' slug=i.slug %}" class="d-block mb-0 thumbnail"><img style="height:300px;overflow-y:hidden;" src="/media/{{i.room_pic}}" height="200px;" width="300px;" alt="Image" class="img-fluid"></a>
                   {% else %}
-                  <a href="{% url 'Room_Detail' slug=i.slug %}" class="d-block mb-0 thumbnail"><img src="{% static 'images/img_2.jpg' %}" height="400px;" width="500px;" alt="Image" class="img-fluid"></a>
+                  <a href="{% url 'Room_Detail' slug=i.slug %}" class="d-block mb-0 thumbnail"><img style="height:300px;overflow-y:hidden;" src="{% static 'images/img_2.jpg' %}" height="400px;" width="500px;" alt="Image" class="img-fluid"></a>
                   {% endif %}
-                  <div class="hotel-room-body">
+                  <div class="hotel-room-body" style="position:absolute;bottom:-16px;left:40px;">
                     <h3 class="heading mb-0"><a href="#">{{i.room_type}}</a></h3>
                     <strong class="price"> ₹{{i.price}}.00 / per night</strong>
                   </div>

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+  <style media="screen">
+      body{
+        overflow-x:hidden;
+        background-color:#F2F2F2;
+      }
+
+      .site-navbar-wrap, .site-navbar{
+        background-color:white !important;
+      }
+
+      .site-navbar-wrap{
+        box-shadow:0px 1px 10px -5px;
+      }
+  </style>
+
+  <div class="">
+
+    <div class="site-section bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 mx-auto text-center mb-5 section-heading">
+            <h2 class="mb-5">Created Rooms</h2>
+          </div>
+        </div>
+        <div class="row">
+          {% for i in room %}
+            <div class="col-md-6 col-lg-4 mb-5">
+            <div class="hotel-room text-center" style="height:390px;width:300px;position:relative;box-shadow:0px 10px 10px -8px;">
+              <a href="{% url 'ManagerRoomsDetail' slug=i.slug %}" class="d-block mb-0 thumbnail"><img src="/media/{{i.room_pic}}" style="height:300px;overflow-y:hidden;" alt="Image" class="img-fluid"></a>
+              <div class="hotel-room-body" align="center" style="position:absolute;bottom:-16px;left:40px;">
+                <h3 class="heading mb-0"><a href="{% url 'Room_Detail' slug=i.slug %}">{{i.room_type}}</a></h3>
+                <strong class="price" style="font-weight:bolder;"> ₹{{i.price}}.00 / per night</strong>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+
+{% endblock %}
