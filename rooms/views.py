@@ -26,8 +26,6 @@ def create_rooms(request):
         start_times = request.POST.getlist('fn_start_time')
         end_times = request.POST.getlist('fn_end_time')
 
-        print(start_times)
-        print(end_times)
         for i in range(0,len(start_times)):
             TimeSlot.objects.create(room_id=obj_room,start_time=str(start_times[i]),end_time=str(end_times[i]))
         return HttpResponseRedirect('/manager/rooms/')
@@ -42,10 +40,7 @@ def show_rooms(request):
 
 def room_detail(request,slug):
     room = get_object_or_404(Room, slug=slug)
-    print(room)
-    print(slug)
     day = request.POST.get('check_day')
-    print(day)
     start_date = datetime.now().strftime ("%Y-%m-%d")
     date = datetime.strptime(start_date, "%Y-%m-%d")
     end_date = date + timedelta(days=room.prior_booking_days)
@@ -63,7 +58,6 @@ def room_detail(request,slug):
         for i in all_slots:
             if i not in booked_timeslots:
                 available_slots.append(i)
-        print(available_slots)
         if len(available_slots)==0:
             return render(request,'room_detail.html',{'date':day,'room':room,'no_slots':1,'start_date':start_date,'end_date':end_date})
         return render(request,'room_detail.html',{'date':day,'room':room,'avail_slots':available_slots,'start_date':start_date,'end_date':end_date})
@@ -99,13 +93,11 @@ def customer_profile(request):
         address = request.POST.get('address')
         city = request.POST.get('city')
         profile_pic = request.FILES.get('profile_pic')
-        print(profile_pic)
         if profile_pic!="" and profile_pic!=None:
             if profile_pic != None:
                 fs = FileSystemStorage()
                 filename = fs.save(profile_pic.name, profile_pic)
                 uploaded_file_url = fs.url(filename)
-                print(uploaded_file_url)
             if request.user.customer:
                 Customer.objects.filter(customer_id=request.user).update(contact=contact,profession=profession,address=address,city=city,profile_pic=profile_pic)
             else:
@@ -173,7 +165,6 @@ def manager_rooms_detail(request,slug):
     if request.user.manager == True:
         room = get_object_or_404(Room, slug=slug)
         day = request.POST.get('check_day')
-        print(day)
         start_date = datetime.now().strftime ("%Y-%m-%d")
         date = datetime.strptime(start_date, "%Y-%m-%d")
         end_date = date + timedelta(days=room.prior_booking_days)
@@ -190,7 +181,6 @@ def delete_timeslot(request):
         room_no = request.POST.get('room_no')
         room = Room.objects.filter(room_number=room_no).first()
         TimeSlot.objects.filter(room_id=room).filter(start_time=start_time).filter(end_time=end_time).delete()
-        print(room_no)
         return HttpResponseRedirect('/manager/rooms/')
     return HttpResponseRedirect('/')
 
