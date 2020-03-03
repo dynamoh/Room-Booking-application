@@ -7,4 +7,6 @@ Project Setup :-
   6. Now you are good to go, run the project by using the command "python manage.py runserver".
   
 
-
+Running Test Cases:
+  1. Switch to the folder containing manage.py file
+  2. Use command 'python manage.py test rooms' to run test cases
