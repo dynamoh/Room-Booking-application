@@ -6,13 +6,49 @@ from rest_framework.generics import (ListAPIView,
                                     CreateAPIView,
                                     UpdateAPIView,
                                     DestroyAPIView)
-from accounts.api.serializers import CustomerRegistrationSerializer,ManagerRegistrationSerializer,RoomSerializer
-from rooms.models import Room
+from accounts.api.serializers import (CustomerRegistrationSerializer,
+                                    ManagerRegistrationSerializer,
+                                    RoomSerializer,
+                                    TimeslotSerializer,
+                                    BookingSerializer,)
+from rooms.models import (Room,
+                        TimeSlot,
+                        RoomBooked)
 
 
 class RoomDetailView(RetrieveAPIView):
+    lookup_field = "slug"
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
+
+class TimeslotDetailView(ListAPIView):
+
+    lookup_field = "room_id"
+
+    def get_queryset(self):
+        print(self.kwargs['room_id'])
+        p = self.kwargs['room_id']
+        r = Room.objects.filter(slug=p).first()
+        print(r)
+        t = TimeSlot.objects.all().filter(room_id=r)
+        print(t)
+        return TimeSlot.objects.all().filter(room_id=r)
+
+    serializer_class = TimeslotSerializer
+
+
+class BookingDetailView(ListAPIView):
+
+    lookup_field = "room_timeslot_booked"
+
+    def get_queryset(self):
+        print(self.kwargs['room_timeslot_booked'])
+        p = self.kwargs['room_timeslot_booked']
+        r = Room.objects.filter(slug=p).first()
+        b = RoomBooked.objects.all().filter(room_timeslot_booked__room_id=r)
+        return RoomBooked.objects.all().filter(room_timeslot_booked__room_id=r)
+
+    serializer_class = BookingSerializer
 
 
 @api_view(['POST',])

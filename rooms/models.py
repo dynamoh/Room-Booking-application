@@ -49,7 +49,7 @@ class Room(models.Model):
         return self.room_number
 
 class TimeSlot(models.Model):
-    room_id = models.ForeignKey(Room,on_delete=models.CASCADE)
+    room_id = models.ForeignKey(Room,on_delete=models.CASCADE,related_name="timeslots")
     start_time = models.CharField(max_length=10,default="")
     end_time = models.CharField(max_length=10,default="")
 
@@ -60,8 +60,8 @@ class TimeSlot(models.Model):
         return self.room_id.room_number
 
 class RoomBooked(models.Model):
-    customer_booked = models.ForeignKey(Customer,on_delete=models.CASCADE)
-    room_timeslot_booked = models.ForeignKey(TimeSlot,on_delete=models.CASCADE)
+    customer_booked = models.ForeignKey(Customer,on_delete=models.CASCADE,related_name="customerBooked")
+    room_timeslot_booked = models.ForeignKey(TimeSlot,on_delete=models.CASCADE,related_name="timeslotBooked")
     booked_for = models.DateField()
     booked_on = models.DateTimeField(default=timezone.now)
 
