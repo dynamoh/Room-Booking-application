@@ -10,11 +10,20 @@ from accounts.api.serializers import (CustomerRegistrationSerializer,
                                     ManagerRegistrationSerializer,
                                     RoomSerializer,
                                     TimeslotSerializer,
-                                    BookingSerializer,)
+                                    BookingSerializer,
+                                    customerSerializer)
 from rooms.models import (Room,
                         TimeSlot,
-                        RoomBooked)
+                        RoomBooked,
+                        Customer)
 
+class CustomerListView(ListAPIView):
+    queryset = Customer.objects.all()
+    serializer_class = customerSerializer
+
+class CustomerDetailView(RetrieveAPIView):
+    queryset = Customer.objects.all()
+    serializer_class = customerSerializer
 
 class RoomDetailView(RetrieveAPIView):
     lookup_field = "slug"

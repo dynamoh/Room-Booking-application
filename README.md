@@ -1,3 +1,8 @@
+email :- dynamoh121@gmail.com
+username :- dynamo
+
+Full Name :- Heet Gupta
+
 Project Setup :-
   1. Download the zip file or clone the project using "git clone https://github.com/dynamoh/FOSSEE.git"
   2. Create ypur virtual enviorment and activate it.

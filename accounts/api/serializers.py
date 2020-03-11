@@ -57,6 +57,12 @@ class ManagerRegistrationSerializer(serializers.ModelSerializer):
         Manager.objects.create(manager_id=user)
         return user
 
+class customerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = '__all__'
+        depth = 1
+
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
@@ -68,8 +74,11 @@ class TimeslotSerializer(serializers.ModelSerializer):
         fields = ['start_time','end_time']
         lookup_field = "room_id"
 
+
+
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = RoomBooked
         fields = ['customer_booked','room_timeslot_booked','booked_for','booked_on']
         lookup_field = "room_timeslot_booked"
+        depth = 1

@@ -5,11 +5,15 @@ from accounts.api.views import (
             RoomDetailView,
             TimeslotDetailView,
             BookingDetailView,
+            CustomerListView,
+            CustomerDetailView
 )
 
 app_name = "useraccount"
 
 urlpatterns = [
+    path('customers/',CustomerListView.as_view()),
+    path('customers/<int:pk>/',CustomerDetailView.as_view()),
     path('register/customer',customer_registration_view,name="registercustomer"),
     path('register/manager',manager_registration_view,name="registermanager"),
     path('room/<str:slug>/',RoomDetailView.as_view()),
