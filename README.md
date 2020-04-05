@@ -10,6 +10,8 @@ Project Setup :-
   4. Install the dependencies by using the command "pip install -r requirements.txt" on your terminal.
   5. Apply the migration by using the command "python manage.py migrate" on your terminal.
   6. Now you are good to go, run the project by using the command "python manage.py runserver".
+  7. Signup as manager to Create Rooms and see booking details.
+  8. Signup as user to Book a room.
   
 
 Running Test Cases:
